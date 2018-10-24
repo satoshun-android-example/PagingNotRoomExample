@@ -50,6 +50,9 @@ dependencies {
   implementation Libs.coroutine
   implementation Libs.ui_coroutine
 
+  implementation Libs.paging
+  implementation Libs.paging_ktx
+
   testImplementation Libs.junit
 
   androidTestImplementation Libs.test_runner

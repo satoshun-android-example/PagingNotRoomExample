@@ -25,12 +25,9 @@ object Libs {
   val constraintlayout = "androidx.constraintlayout:constraintlayout:2.0.0-alpha2"
   val cardview = "androidx.cardview:cardview:1.0.0"
 
-  val webkit = "androidx.webkit:webkit:1.0.0"
-  val media2 = "androidx.media2:media2:1.0.0-alpha03"
-
   val material = "com.google.android.material:material:1.0.0"
-  val paging = "androidx.paging:paging-runtime:2.0.0"
-  val browser = "androidx.browser:browser:1.0.0"
+  val paging = "androidx.paging:paging-runtime:2.1.0-alpha01"
+  val paging_ktx = "androidx.paging:paging-runtime-ktx:2.1.0-alpha01"
 
   val room_common = "androidx.room:room-common:2.0.0"
   val room_runtime = "androidx.room:room-runtime:2.0.0"
