@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.paging.DataSource
 import androidx.paging.PageKeyedDataSource
@@ -16,6 +17,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.github.satoshun.example.paging.notroom.BaseActivity
 import com.github.satoshun.example.paging.notroom.R
 import kotlinx.android.synthetic.main.main_act.*
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.concurrent.Executors
 
 class MainActivity : BaseActivity() {
@@ -27,12 +31,16 @@ class MainActivity : BaseActivity() {
     val adapter = MainPagingAdapter()
     recycler.adapter = adapter
 
-    val sourceFactory = UserDataSourceFactory()
+    val errorLiveData = MutableLiveData<Throwable>()
+    val sourceFactory = UserDataSourceFactory(errorLiveData)
     val livePageList = sourceFactory.toLiveData(
         pageSize = 10,
         fetchExecutor = Executors.newSingleThreadExecutor()
     )
-    val listing = Listing(livePageList)
+    val listing = Listing(
+        livePageList,
+        errorLiveData
+    )
     listing.pagedList.observe(this, Observer {
       adapter.submitList(it!!)
     })
@@ -66,26 +74,44 @@ object UserCallback : DiffUtil.ItemCallback<User>() {
   }
 }
 
-class UserDataSourceFactory : DataSource.Factory<String, User>() {
-  override fun create(): DataSource<String, User> {
-    return UserDataSource()
+class UserDataSourceFactory(
+  private val errorLiveData: MutableLiveData<Throwable>
+) : DataSource.Factory<Int, User>() {
+  override fun create(): DataSource<Int, User> {
+    return UserDataSource(errorLiveData)
   }
 }
 
-class UserDataSource : PageKeyedDataSource<String, User>() {
-  override fun loadInitial(params: LoadInitialParams<String>, callback: LoadInitialCallback<String, User>) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+class UserDataSource(
+  private val errorLiveData: MutableLiveData<Throwable>
+) : PageKeyedDataSource<Int, User>() {
+  override fun loadInitial(params: LoadInitialParams<Int>, callback: LoadInitialCallback<Int, User>) {
+    GlobalScope.launch {
+      delay(1000)
+      callback.onResult(
+          (0..9).map { User(name = it.toString()) },
+          0,
+          10
+      )
+    }
   }
 
-  override fun loadAfter(params: LoadParams<String>, callback: LoadCallback<String, User>) {
-    TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+  override fun loadAfter(params: LoadParams<Int>, callback: LoadCallback<Int, User>) {
+    GlobalScope.launch {
+      delay(1500)
+      callback.onResult(
+          (params.key..params.key + 9).map { User(name = it.toString()) },
+          params.key + 10
+      )
+    }
   }
 
-  override fun loadBefore(params: LoadParams<String>, callback: LoadCallback<String, User>) {
+  override fun loadBefore(params: LoadParams<Int>, callback: LoadCallback<Int, User>) {
     // do nothing
   }
 }
 
 class Listing(
-  val pagedList: LiveData<PagedList<User>>
+  val pagedList: LiveData<PagedList<User>>,
+  val error: LiveData<Throwable>
 )
