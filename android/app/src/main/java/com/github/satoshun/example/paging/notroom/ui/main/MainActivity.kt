@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.satoshun.example.paging.notroom.BaseActivity
 import com.github.satoshun.example.paging.notroom.R
+import com.github.satoshun.example.paging.notroom.data.User
 import kotlinx.android.synthetic.main.main_act.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -57,10 +58,6 @@ class MainPagingAdapter : PagedListAdapter<User, MainViewHolder>(UserCallback) {
     holder.view.text = item.name
   }
 }
-
-data class User(
-  val name: String
-)
 
 class MainViewHolder(val view: TextView) : RecyclerView.ViewHolder(view)
 
