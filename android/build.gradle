@@ -1,0 +1,19 @@
+buildscript {
+  repositories {
+    google()
+    jcenter()
+    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
+  }
+
+  dependencies {
+    classpath Libs.android_plugin
+  }
+}
+
+allprojects {
+  repositories {
+    google()
+    jcenter()
+    maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
+  }
+}

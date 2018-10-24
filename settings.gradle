@@ -1,0 +1,8 @@
+rootProject.name = 'paging-app'
+
+enableFeaturePreview('GRADLE_METADATA')
+
+include ':common'
+
+include ':android'
+include ':android:app'

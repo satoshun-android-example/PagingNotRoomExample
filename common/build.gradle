@@ -1,0 +1,33 @@
+apply plugin: 'kotlin-multiplatform'
+
+kotlin {
+  targets {
+    fromPreset(presets.jvm, 'jvm')
+  }
+  sourceSets {
+    commonMain {
+      dependencies {
+        implementation 'org.jetbrains.kotlin:kotlin-stdlib'
+        implementation Libs.coroutine_common
+      }
+    }
+    commonTest {
+      dependencies {
+        implementation "org.jetbrains.kotlin:kotlin-test-common"
+        implementation "org.jetbrains.kotlin:kotlin-test-annotations-common"
+      }
+    }
+    jvmMain {
+      dependencies {
+        implementation Libs.kotlin
+        implementation Libs.coroutine_jvm
+      }
+    }
+    jvmTest {
+      dependencies {
+        implementation 'org.jetbrains.kotlin:kotlin-test'
+        implementation 'org.jetbrains.kotlin:kotlin-test-junit'
+      }
+    }
+  }
+}
